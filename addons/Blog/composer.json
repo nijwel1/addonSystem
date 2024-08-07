@@ -1,0 +1,17 @@
+{
+    "name": "your-vendor/blog-addon",
+    "description": "A blog addon for Laravel",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Addons\\Blog\\": ""
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Addons\\Blog\\BlogServiceProvider"
+            ]
+        }
+    }
+}
