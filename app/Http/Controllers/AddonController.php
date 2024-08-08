@@ -77,7 +77,7 @@ class AddonController extends Controller {
     }
 
     protected function registerProvider() {
-        $addonServiceProvider = 'App\Providers\BlogServiceProvider';
+        $addonServiceProvider = 'Addons\Providers\BlogServiceProvider';
 
         // Update config/app.php to add the service provider
         $configAppPath = base_path( 'bootstrap/providers.php' );
@@ -87,10 +87,8 @@ class AddonController extends Controller {
             $pattern     = "/('return' => \[)/";
             $replacement = "\n        $addonServiceProvider::class,";
 
-            // dd( $replacement );
+            // dd( $configApp );
             $configApp = preg_replace( $pattern, $replacement, $configApp );
-
-            dd( $configApp );
 
             file_put_contents( $configAppPath, $configApp );
         }
