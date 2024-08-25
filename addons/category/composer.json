@@ -1,0 +1,17 @@
+{
+    "name": "nijwel/category-addon",
+    "description": "A category addon for Laravel",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Addons\\Category\\": ""
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Addons\\Category\\CategoryServiceProvider"
+            ]
+        }
+    }
+}
