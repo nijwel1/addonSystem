@@ -58,6 +58,29 @@ class CreateRouteGroup extends Command {
     // }
 
     //----With stub need confirm----
+    // public function handle() {
+    //     $name           = strtolower( $this->argument( 'name' ) ); // Keep the name lowercase
+    //     $controllerName = ucfirst( $name ) . 'Controller'; // Capitalize for the controller
+
+    //     // Check if the route group already exists
+    //     $routesFile = base_path( 'routes/web.php' );
+    //     $stub       = file_get_contents( app_path( 'stubs/route-group.stub' ) );
+    //     $newRoute   = str_replace( ['{{name}}', '{{controller}}'], [$name, $controllerName], $stub );
+
+    //     // Check if the new route already exists
+    //     if ( strpos( file_get_contents( $routesFile ), $newRoute ) !== false ) {
+    //         $this->warn( "The route group for '$name' already exists." );
+    //         if ( !$this->confirm( 'Do you want to overwrite it?' ) ) {
+    //             $this->info( 'Operation cancelled.' );
+    //             return;
+    //         }
+    //     }
+
+    //     // Append to routes file
+    //     file_put_contents( $routesFile, "\n" . $newRoute, FILE_APPEND );
+    //     $this->info( "Route group for '$name' created successfully." );
+    // }
+
     public function handle() {
         $name           = strtolower( $this->argument( 'name' ) ); // Keep the name lowercase
         $controllerName = ucfirst( $name ) . 'Controller'; // Capitalize for the controller
@@ -76,9 +99,20 @@ class CreateRouteGroup extends Command {
             }
         }
 
-        // Append to routes file
-        file_put_contents( $routesFile, "\n" . $newRoute, FILE_APPEND );
-        $this->info( "Route group for '$name' created successfully." );
+        // Read the current routes
+        $currentRoutes = file_get_contents( $routesFile );
+
+        // Find the position of the last '});'
+        $lastPosition = strrpos( $currentRoutes, '// ------ route end -----' );
+
+        // If '});' is found, insert the new route before it
+        if ( $lastPosition !== false ) {
+            $updatedRoutes = substr( $currentRoutes, 0, $lastPosition ) . "\n" . $newRoute . "\n" . substr( $currentRoutes, $lastPosition );
+            file_put_contents( $routesFile, $updatedRoutes );
+            $this->info( "Route group for '$name' created successfully." );
+        } else {
+            $this->warn( "Could not find the ending for the routes file." );
+        }
     }
 
 }
